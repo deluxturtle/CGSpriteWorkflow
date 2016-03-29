@@ -33,20 +33,51 @@ public class ScriptCharacterControl : MonoBehaviour {
         if(verticalInput < 0)
         {
             //walk foward
+            animator.speed = 1;
             animator.SetInteger("Direction", 0);
         }
         else if(verticalInput > 0)
         {
+            animator.speed = 1;
             animator.SetInteger("Direction", 1);
         }
 
         if(horizontalInput < 0)
         {
+            animator.speed = 1;
             animator.SetInteger("Direction", 2);
         }
         else if(horizontalInput > 0)
         {
+            animator.speed = 1;
             animator.SetInteger("Direction", 3);
         }
-	}
+
+        if(horizontalInput ==0 && verticalInput == 0)
+        {
+            animator.speed = 0;
+        }
+
+        transform.Translate(Vector2.right * horizontalInput * speed * Time.deltaTime);
+        transform.Translate(Vector2.up * verticalInput * speed * Time.deltaTime);
+
+        if(transform.localPosition.x < screenSW.x - wrapPadding)
+        {
+            //wrap
+            transform.localPosition = new Vector3(screenNE.x, transform.position.y);
+        }
+        else if(transform.localPosition.x > screenNE.x + wrapPadding)
+        {
+            transform.localPosition = new Vector3(screenSW.x, transform.position.y);
+        }
+
+        if(transform.localPosition.y < screenSW.y - wrapPadding)
+        {
+            transform.localPosition = new Vector3(transform.position.x, screenNE.y);
+        }
+        else if(transform.localPosition.y > screenNE.y + wrapPadding)
+        {
+            transform.localPosition = new Vector3(transform.position.x, screenSW.y );
+        }
+    }
 }
